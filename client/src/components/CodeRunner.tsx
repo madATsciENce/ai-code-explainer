@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import api from '../utils/api';
+import './CodeRunner.css'; // 💡 Important: We'll create this file
 
 const languages = [
   { label: 'JavaScript', value: 'javascript' },
@@ -37,12 +38,12 @@ const CodeRunner: React.FC = () => {
   const [output, setOutput] = useState('');
 
   const runCode = async () => {
-    setOutput('Running...');
+    setOutput('⏳ Running your code...');
 
     const mapped = jdoodleLanguageMap[language];
 
     if (!mapped) {
-      setOutput('Unsupported language selected.');
+      setOutput('❌ Unsupported language selected.');
       return;
     }
 
@@ -52,34 +53,33 @@ const CodeRunner: React.FC = () => {
         language: mapped.language,
         versionIndex: mapped.versionIndex,
       });
-      
 
       setOutput(response.data.output);
-    } catch (error){
+    } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          setOutput(`Error: ${error.response.data.error}`);
+          setOutput(`❌ Server Error: ${error.response.data.error}`);
         } else if (error.request) {
-          setOutput('Error: No response from server');
+          setOutput('❌ Error: No response from server.');
         } else {
-          setOutput(`Error: ${error.message}`);
+          setOutput(`❌ Error: ${error.message}`);
         }
       } else {
-        setOutput('An unknown error occurred');
+        setOutput('❌ Unknown error occurred.');
       }
     }
   };
 
   return (
-    <div className="p-4 max-w-3xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Multi-Language Code Runner</h2>
+    <div className="runner-container">
+      <h2 className="runner-title">🚀 Multi-Language Code Runner</h2>
 
-      <div className="mb-4">
-        <label className="font-semibold mr-2">Select Language:</label>
+      <div className="runner-field">
+        <label className="runner-label">Select Language:</label>
         <select
           value={language}
           onChange={(e) => setLanguage(e.target.value)}
-          className="p-2 border rounded"
+          className="runner-select"
         >
           {languages.map((lang) => (
             <option key={lang.value} value={lang.value}>
@@ -89,23 +89,25 @@ const CodeRunner: React.FC = () => {
         </select>
       </div>
 
-      <textarea
-        value={code}
-        onChange={(e) => setCode(e.target.value)}
-        rows={12}
-        className="w-full border p-2 font-mono mb-4 rounded"
-      />
+      <div className="runner-field">
+        <textarea
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          rows={10}
+          className="runner-textarea"
+          placeholder="// Write your code here..."
+        />
+      </div>
 
-      <button
-        onClick={runCode}
-        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-      >
-        Run Code
-      </button>
+      <div className="runner-button-container">
+        <button onClick={runCode} className="runner-button">
+          ▶️ Run Code
+        </button>
+      </div>
 
-      <div className="mt-4 bg-black text-white p-4 rounded">
-        <strong>Output:</strong>
-        <pre className="whitespace-pre-wrap">{output}</pre>
+      <div className="runner-output">
+        <strong className="runner-output-title">🖥️ Output:</strong>
+        <pre>{output}</pre>
       </div>
     </div>
   );
