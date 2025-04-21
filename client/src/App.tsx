@@ -4,6 +4,8 @@ import CodeInput from './components/CodeInput';
 import Explanation from './components/Explanation';
 import { fixCode } from './services/groqService';
 import CodeRunner from './components/CodeRunner';
+import './App.css';
+
 
 const App: React.FC = () => {
   const [explanation, setExplanation] = useState('');
