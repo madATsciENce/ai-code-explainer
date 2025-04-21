@@ -1,4 +1,3 @@
-// src/components/Explanation.tsx
 import React from 'react';
 
 interface Props {
@@ -9,13 +8,19 @@ interface Props {
 
 const Explanation: React.FC<Props> = ({ explanation, error, isLoading }) => {
   if (isLoading) {
-    return <div style={{ padding: '20px' }}>Loading explanation...</div>;
+    return (
+      <div className="output">
+        <p className="loading-text">
+          ⏳ Loading<span className="dot-animation">...</span>
+        </p>
+      </div>
+    );
   }
 
   if (error) {
     return (
-      <div style={{ color: 'red', padding: '20px' }}>
-        <h2>Error:</h2>
+      <div className="output">
+        <h2 style={{ color: 'red' }}>Error:</h2>
         <p>{error}</p>
       </div>
     );
@@ -26,8 +31,8 @@ const Explanation: React.FC<Props> = ({ explanation, error, isLoading }) => {
   }
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Code Explanation:</h2>
+    <div className="output">
+      <h2>Code Output:</h2>
       <pre style={{ whiteSpace: 'pre-wrap' }}>{explanation}</pre>
     </div>
   );
